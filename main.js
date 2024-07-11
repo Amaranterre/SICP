@@ -130,9 +130,11 @@ function update_player(gameObject){
 }
 
 
-//--------------------------------------------------->//
+//--------------------------------------------------->
 ///////////////////////////////////////////////////////
 
 const main_cam_target = get_main_camera_following_target();
 set_start(player, start_player);
 set_update(player, update_player);
+
+///
