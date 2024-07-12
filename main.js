@@ -21,8 +21,7 @@ function my_debug(gameObject) {
     const pos = get_position(gameObject);
     const x = get_x(pos);
     const y = get_y(pos);
-    debug_log("x: ", x, " y: ", y);
-    
+    debug_log("x: " + stringify(x) + " y: " + stringify(y));
 }
 
 
@@ -34,6 +33,9 @@ function my_debug(gameObject) {
 //<----------------------------------------------------
 // const related
 
+const x_boundary = 15;
+const y_boundary = 15;
+ 
 const direction_left = vector3(-1, 0, 0);
 const direction_right = vector3(1, 0, 0);
 const direction_up = vector3(0, 1, 0);
@@ -45,8 +47,19 @@ const direction_down = vector3(0, -1, 0);
 
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
-// vector related 
+// predicate_related
 
+function is_out_boundary(gameObject) {
+    const pos = get_position(gameObject);
+    return math_abs(x_of(pos)) > x_boundary || math_abs(y_of(pos)) > y_boundary
+}
+
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
+// vector related 
 function abs_vector(vec) {
     return vector3(math_abs(get_x(vec)),
     math_abs(get_y(vec)),
@@ -60,6 +73,16 @@ function is_same_vector(vec1, vec2) {
         ? true
         : false;
 }
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
+// bullet related 
+
+// function createBullet
+
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
@@ -69,7 +92,7 @@ function is_same_vector(vec1, vec2) {
 //<----------------------------------------------------
 // player related
 
-const player = instantiate_sprite("https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/playe.png");
+const player = instantiate_sprite("https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/player.png");
 let player_speed = 3;
 
 function get_player_move_direction() {
