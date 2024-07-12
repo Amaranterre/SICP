@@ -13,6 +13,23 @@ import {init_unity_academy_3d, init_unity_academy_2d, set_start, set_update,
 
 init_unity_academy_2d();
 
+
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
+// debug related
+function my_debug(gameObject) {
+    const pos = get_position(gameObject);
+    const x = get_x(pos);
+    const y = get_y(pos);
+    debug_log("x: ", x, " y: ", y);
+    
+}
+
+
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
+
+
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // const related
@@ -116,6 +133,8 @@ function player_move(gameObject) {
     
     player_move_rotate(gameObject, move_direction); // rotate player depending on 
                                                     // move direction
+                                                    
+    
 }
 
 function start_player(gameObject){
@@ -125,8 +144,9 @@ function start_player(gameObject){
     set_use_gravity(gameObject, false);
 }
 function update_player(gameObject){
-
     player_move(gameObject);
+    
+    my_debug(gameObject);
 
 }
 
