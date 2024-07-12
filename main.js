@@ -7,7 +7,7 @@ import {init_unity_academy_3d, init_unity_academy_2d, set_start, set_update,
     set_angular_velocity, set_mass, set_use_gravity ,set_velocity,
     on_collision_enter, on_collision_stay, on_collision_exit,
     get_main_camera_following_target, vector3, get_x, get_y, vector_difference,
-    add_vectors, scale_vector, normalize, debug_log, get_z
+    add_vectors, scale_vector, normalize, debug_log, get_z, magnitude
 }
     from "unity_academy";
 
@@ -96,7 +96,7 @@ function player_move_rotate(gameObject, move_direction) {
     if( !is_same_vector(move_direction, vector3(0, 0, 0)) ) { //when moving
         const degree = get_face_degree(move_direction);
         
-        set_scale(gameObject, vector3(1.2, 0.8, 0.8));
+        set_scale(gameObject, vector3(1.05, 0.95, 0.95));
         set_rotation_euler(gameObject, vector3(0, 0 , degree));
     } else { //not moving
         set_scale(gameObject, vector3(1, 1, 1));
@@ -110,7 +110,8 @@ function player_move(gameObject) {
     move_direction = get_player_move_direction(); // get move direction
     
     translate_world(gameObject, 
-        scale_vector(move_direction, delta_time() * player_speed)); 
+        scale_vector(move_direction, 
+            delta_time() * player_speed * magnitude(move_direction))); 
     // move by direction
     
     player_move_rotate(gameObject, move_direction); // rotate player depending on 
