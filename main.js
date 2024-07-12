@@ -1,4 +1,4 @@
-import {init_unity_academy_3d, init_unity_academy_2d, set_start, set_update,
+ import {init_unity_academy_3d, init_unity_academy_2d, set_start, set_update,
     instantiate, delta_time, instantiate_sprite, same_gameobject, destroy,
     translate_world,get_key_down, get_key, get_key_up, get_position, copy_position,
     set_position, get_rotation_euler, set_rotation_euler, rotate_world,
@@ -21,6 +21,10 @@ const direction_left = vector3(-1, 0, 0);
 const direction_right = vector3(1, 0, 0);
 const direction_up = vector3(0, 1, 0);
 const direction_down = vector3(0, -1, 0);
+
+if (get_key("F")){
+    const bullet=instantiate_sprite("https://raw.githubusercontent.com/Amaranterre/SICP/main/main.png");
+}
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
@@ -52,10 +56,15 @@ function is_same_vector(vec1, vec2) {
 //<----------------------------------------------------
 // player related
 
-const player = instantiate_sprite("https://raw.githubusercontent.com/Amaranterre/SICP/main/main.png");
+const player1 = instantiate_sprite("https://raw.githubusercontent.com/Amaranterre/SICP/main/main.png");
+
+
+const player2 = instantiate_sprite("https://raw.githubusercontent.com/Amaranterre/SICP/main/main.png");
+
+
 let player_speed = 3;
 
-function get_player_move_direction() {
+function get_player_move_direction1() {
     let direction = vector3(0, 0, 0);
     if(get_key("A")){
         direction = add_vectors(direction_left, direction);
@@ -70,6 +79,36 @@ function get_player_move_direction() {
         direction = add_vectors(direction_down, direction);
     }
     return direction;
+}
+
+function get_player_move_direction2(){
+    let direction = vector3(0, 0, 0);
+    if(get_key("J")){
+        direction = add_vectors(direction_left, direction);
+    } 
+    if(get_key("L")){
+        direction = add_vectors(direction_right, direction);
+    } 
+    if(get_key("I")){
+        direction = add_vectors(direction_up, direction);
+    } 
+    if(get_key("K")){
+        direction = add_vectors(direction_down, direction);
+    }
+    return direction;
+}
+
+function change_speed() {
+    player_speed=3;
+    if ((get_key("A")&&get_key("W"))||(get_key("A")&&get_key("S"))
+         ||(get_key("D")&&get_key("S"))||(get_key("D")&&get_key("W"))){
+        player_speed=player_speed/math_sqrt(2);
+    }
+    else if ((get_key("J")&&get_key("I"))||(get_key("J")&&get_key("K"))
+         ||(get_key("L")&&get_key("K"))||(get_key("L")&&get_key("I"))){
+        player_speed=player_speed/math_sqrt(2);
+    }
+    return player_speed;
 }
 
 function get_player_move_scale(move_direction) {
@@ -104,10 +143,10 @@ function player_move_rotate(gameObject, move_direction) {
     }
 }
 
-function player_move(gameObject) {
+function player_move1(gameObject) {
     let move_direction = vector3(0, 0, 0);
-    
-    move_direction = get_player_move_direction(); // get move direction
+    change_speed();
+    move_direction = get_player_move_direction1(); // get move direction
     
     translate_world(gameObject, 
         scale_vector(move_direction, delta_time() * player_speed)); 
@@ -117,15 +156,43 @@ function player_move(gameObject) {
                                                     // move direction
 }
 
-function start_player(gameObject){
-    set_position(gameObject, vector3(-2, 2, 0));
+function player_move2(gameObject) {
+    let move_direction = vector3(0, 0, 0);
+    change_speed();
+    move_direction = get_player_move_direction2(); // get move direction
+    
+    translate_world(gameObject, 
+        scale_vector(move_direction, delta_time() * player_speed)); 
+    // move by direction
+    
+    player_move_rotate(gameObject, move_direction); // rotate player depending on 
+                                                    // move direction
+}
+
+function start_player1(gameObject){
+    set_position(gameObject, vector3(-3, 2, 0));
     set_scale(gameObject, vector3(0.5, 0.5, 1));
     apply_rigidbody(gameObject);
     set_use_gravity(gameObject, false);
 }
-function update_player(gameObject){
 
-    player_move(gameObject);
+
+function start_player2(gameObject){
+    set_position(gameObject, vector3(3, 2, 0));
+    set_scale(gameObject, vector3(0.5, 0.5, 1));
+    apply_rigidbody(gameObject);
+    set_use_gravity(gameObject, false);
+}
+
+function update_player1(gameObject){
+
+    player_move1(gameObject);
+
+}
+
+function update_player2(gameObject){
+
+    player_move2(gameObject);
 
 }
 
@@ -133,8 +200,11 @@ function update_player(gameObject){
 //--------------------------------------------------->
 ///////////////////////////////////////////////////////
 
-const main_cam_target = get_main_camera_following_target();
-set_start(player, start_player);
-set_update(player, update_player);
+
+set_start(player1, start_player1);
+set_update(player1, update_player1);
+set_start(player2,start_player2);
+set_update(player2,update_player2);
+
 
 ///
