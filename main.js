@@ -69,7 +69,7 @@ function is_same_vector(vec1, vec2) {
 //<----------------------------------------------------
 // player related
 
-const player = instantiate_sprite("https://raw.githubusercontent.com/Amaranterre/SICP/main/main.png");
+const player = instantiate_sprite("https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/playe.png");
 let player_speed = 3;
 
 function get_player_move_direction() {
