@@ -126,7 +126,7 @@ function getPlayerBulletCreator(time_gap) {
     
             set_start(cur_bullet, (gameObject) => {
                 apply_rigidbody(gameObject);
-                remove_collider_components(gameObject); // very important !!
+                // remove_collider_components(gameObject); // very important !!
                 set_use_gravity(gameObject, false);
             
                 set_rotation_euler(gameObject, 
@@ -223,7 +223,7 @@ set_update(turret, gameObject => {
             // const velocity = vector3(math_cos(facingAngle) * bulletSpeed, 
             //     math_sin(facingAngle) * bulletSpeed, 0);
             const velocity = vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0);
-            const scale = vector3(2, 2, 0); //set bullet size
+            const scale = vector3(5, 5, 0); //set bullet size
         
         
             bullet_creator(position, angle, velocity, scale);
@@ -243,7 +243,7 @@ const playerLayer = 16;
 const player = instantiate_sprite(PlayerImageURL);
 let player_speed = 3;
 
-const bullet_creator = getPlayerBulletCreator(0.3); //set shoot gap
+const bullet_creator = getPlayerBulletCreator(1); //set shoot gap
 
 
 function get_player_move_direction() {
