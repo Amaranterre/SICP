@@ -52,6 +52,8 @@ const TestWallImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/mai
 
 const BoomFireImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/boom_fire.png";
 
+const WallImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/wall.png";
+
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
@@ -65,9 +67,9 @@ function playConsistAnim(imageUrl, duration, position, scale, euler) {
     const body = instantiate_sprite(imageUrl);
     let time_count = 0;
     set_start(body, (gameObject) => {
-        set_position(position);
-        set_scale(scale);
-        set_rotation_euler(euler);
+        set_position(gameObject, position);
+        set_scale(gameObject, scale);
+        set_rotation_euler(gameObject, euler);
     });
     set_update(body, (gameObject) => {
        time_count = time_count + delta_time();
@@ -141,9 +143,51 @@ function is_same_vector(vec1, vec2) {
 
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
+// map related
+
+//wallData: ['x' or 'y', position, scale]
+const wallsData = [
+    ['x', vector3(0, -4.5, 0), vector3(2.58, 1, 0)],
+    ['x', vector3(0, 4.5, 0), vector3(2.58, 1, 0)],
+    ['y', vector3(-7, 0, 0), vector3(1.6673, 1, 0)],
+    ['y', vector3(7, 0, 0), vector3(1.6673, 1, 0)]
+]; 
+
+let walls = [];
+
+
+
+function ConstructMap() {
+    const dataLen = array_length(wallsData);
+    for(let i = 0; i < dataLen; i = i + 1) {
+        
+        const position = wallsData[i][1];
+        const scale = wallsData[i][2];
+        const wall = instantiate_sprite(WallImageURL);
+        
+        debug_log(position);
+        set_position(wall, position);
+        set_scale(wall, scale);
+        
+        if(wallsData[i][0] === 'y') {
+            set_rotation_euler(wall, vector3(0, 0, 90));
+        }   
+        
+        walls[i] = wall;
+    }
+}
+
+
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
 // wall related 
 
-const testWall = instantiate_sprite(TestWallImageURL);
+// const testWall = instantiate_sprite(TestWallImageURL);
 
 function getWallStart(position, scale) {
     return (gameObject) => {
@@ -163,9 +207,17 @@ function getWallStart(position, scale) {
 
 const bulletLayer = 17;
 const bulletSpeed = 5;
-const MAXCollideNum = 3;
+const MAXCollideNum = 12;
 
 function is_y_wall(gameObject) {
+    const wallsLen = array_length(walls);
+    debug_log("check y wall");
+    for(let i = 0; i < wallsLen; i = i + 1) {
+        if(same_gameobject(gameObject, walls[i])) {
+            return wallsData[i][0] === 'y';
+        }
+    }
+    
     return true;
 }
 
@@ -205,7 +257,7 @@ function bulletCollisionEnter(index, bullets, bullet_collide_count) {
         set_rotation_euler(self, vector3(0, 0, reflectedBulletDirectionDegree - playerBulletImageDegree));
         // debug_log("2");
         // my_debug(self);
-    } else if (is_x_wall(other)) {
+    } else {
         // debug_log("x wall");
         const reflectedBulletDirectionDegree = -bulletDirectionDegree;
         const unit_cos = math_cos((reflectedBulletDirectionDegree / 360) * 2 * math_PI);
@@ -312,6 +364,8 @@ const turret = instantiate_sprite(PlayerTurretImageURL);
 const TurretLength = 2;
 const rotateSpeed = vector3(0, 0, 180); //180 degree per second
 
+const shootGap = 0.5;
+
 // function CreateTurret(tank) { //if using CreateTurret, layer will not be applied correctly, so create turret directly
 //     const turret = instantiate_sprite(PlayerTurretImageURL);
 
@@ -385,7 +439,7 @@ const playerLayer = 16;
 const player = instantiate_sprite(PlayerImageURL);
 let player_speed = 3;
 
-const bullet_creator = getPlayerBulletCreator(1); //set shoot gap
+const bullet_creator = getPlayerBulletCreator(shootGap); //set shoot gap
 
 
 function get_player_move_direction() {
@@ -484,4 +538,6 @@ const main_cam_target = get_main_camera_following_target();
 set_start(player, start_player);
 set_update(player, update_player);
 
-set_start(testWall, getWallStart(vector3(0, 0, 0), vector3(4, 4, 0)));
+// set_start(testWall, getWallStart(vector3(0, 0, 0), vector3(4, 4, 0)));
+
+ConstructMap();
