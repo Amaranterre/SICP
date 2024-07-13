@@ -8,7 +8,7 @@ import {init_unity_academy_3d, init_unity_academy_2d, set_start, set_update,
     on_collision_enter, on_collision_stay, on_collision_exit,
     get_main_camera_following_target, vector3, get_x, get_y, vector_difference,
     add_vectors, scale_vector, normalize, debug_log, get_z, magnitude,
-    remove_collider_components
+    remove_collider_components, set_custom_prop, translate_local
 }
     from "unity_academy";
 
@@ -37,6 +37,9 @@ const PlayerImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/
 
 const PlayerBulletImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/play_bullet.png";
 const playerBulletImageAngle = vector3(0, 0, 135);
+
+const PlayerTurretImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/turret.png";
+
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
@@ -100,6 +103,8 @@ function is_same_vector(vec1, vec2) {
 //<----------------------------------------------------
 // bullet related 
 
+const bulletLayer = 17;
+
 //create a bullet facing $angular at $pos, with $velocity
 function getPlayerBulletCreator(time_gap) {
     const cur_time = get_game_time();
@@ -150,12 +155,59 @@ function getPlayerBulletCreator(time_gap) {
 ///////////////////////////////////////////////////////
 
 
+
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
+// turret related
+
+const turretLayer  = 15;
+const turret = instantiate_sprite(PlayerTurretImageURL);
+const TurrectImagePositionCorrection = vector3(0, 0, 2);
+
+function CreateTurret(tank) { //if using CreateTurret, layer will not be applied correctly, so create turret directly
+    const turret = instantiate_sprite(PlayerTurretImageURL);
+
+    
+    set_start(turret, gameObject => {
+        set_position(gameObject, get_position(tank));
+        remove_collider_components(gameObject);
+        
+        set_custom_prop(gameObject, "layer", turretLayer);
+        translate_world
+    });
+    set_update(turret, gameObject => {
+        set_position(gameObject, get_position(tank));
+    });
+}
+
+set_start(turret, gameObject => {
+        set_position(gameObject, get_position(player));
+        remove_collider_components(gameObject);
+        
+        set_custom_prop(gameObject, "layer", turretLayer); // drawing order
+        
+        translate_local
+    });
+
+set_update(turret, gameObject => {
+        set_position(gameObject, get_position(player));
+});
+
+
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
+
+
+
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // player related
-
+const playerLayer = 16;
 const player = instantiate_sprite(PlayerImageURL);
 let player_speed = 3;
+
+const bullet_creator = getPlayerBulletCreator(0.3); //set shoot gap
+
 
 function get_player_move_direction() {
     let direction = vector3(0, 0, 0);
@@ -227,9 +279,11 @@ function start_player(gameObject){
     set_scale(gameObject, vector3(0.5, 0.5, 1));
     apply_rigidbody(gameObject);
     set_use_gravity(gameObject, false);
+    
+    set_custom_prop(gameObject, "layer", playerLayer);
 }
 
-const bullet_creator = getPlayerBulletCreator(0.3); //set shoot gap
+
 
 function update_player(gameObject){
     cur_time = cur_time + delta_time();
