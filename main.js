@@ -23,6 +23,9 @@ function my_debug(gameObject) {
     const x = get_x(pos);
     const y = get_y(pos);
     debug_log("x: " + stringify(x) + " y: " + stringify(y));
+    
+    const euler = get_rotation_euler(gameObject);
+    debug_log(euler);
 }
 
 
@@ -104,6 +107,7 @@ function is_same_vector(vec1, vec2) {
 // bullet related 
 
 const bulletLayer = 17;
+const bulletSpeed = 5;
 
 //create a bullet facing $angular at $pos, with $velocity
 function getPlayerBulletCreator(time_gap) {
@@ -125,7 +129,7 @@ function getPlayerBulletCreator(time_gap) {
                 remove_collider_components(gameObject); // very important !!
                 set_use_gravity(gameObject, false);
             
-        set_rotation_euler(gameObject, 
+                set_rotation_euler(gameObject, 
                     vector_difference(angle, playerBulletImageAngle)); // modify the image angle
                 set_velocity(gameObject, velocity);
                 set_position(gameObject, pos);
@@ -162,23 +166,24 @@ function getPlayerBulletCreator(time_gap) {
 
 const turretLayer  = 15;
 const turret = instantiate_sprite(PlayerTurretImageURL);
-const TurrectImagePositionCorrection = vector3(0, 0, 2);
 
-function CreateTurret(tank) { //if using CreateTurret, layer will not be applied correctly, so create turret directly
-    const turret = instantiate_sprite(PlayerTurretImageURL);
+const TurretLength = 2;
+const rotateSpeed = vector3(0, 0, 180); //180 degree per second
+
+// function CreateTurret(tank) { //if using CreateTurret, layer will not be applied correctly, so create turret directly
+//     const turret = instantiate_sprite(PlayerTurretImageURL);
 
     
-    set_start(turret, gameObject => {
-        set_position(gameObject, get_position(tank));
-        remove_collider_components(gameObject);
+//     set_start(turret, gameObject => {
+//         set_position(gameObject, get_position(tank));
+//         remove_collider_components(gameObject);
         
-        set_custom_prop(gameObject, "layer", turretLayer);
-        translate_world
-    });
-    set_update(turret, gameObject => {
-        set_position(gameObject, get_position(tank));
-    });
-}
+//         set_custom_prop(gameObject, "layer", turretLayer);
+//     });
+//     set_update(turret, gameObject => {
+//         set_position(gameObject, get_position(tank));
+//     });
+// }
 
 set_start(turret, gameObject => {
         set_position(gameObject, get_position(player));
@@ -186,11 +191,43 @@ set_start(turret, gameObject => {
         
         set_custom_prop(gameObject, "layer", turretLayer); // drawing order
         
-        translate_local
     });
 
 set_update(turret, gameObject => {
+        
         set_position(gameObject, get_position(player));
+        
+        if(get_key("Q")){
+            // debug_log("get Q");
+            const curEuler = get_rotation_euler(gameObject);
+            set_rotation_euler(gameObject,
+                add_vectors(curEuler, scale_vector(rotateSpeed, delta_time())));
+        } else if(get_key("E")){
+            // debug_log("get Q");
+            const curEuler = get_rotation_euler(gameObject);
+            set_rotation_euler(gameObject,
+                add_vectors(curEuler, scale_vector(rotateSpeed, -delta_time())));
+        } 
+        
+        if(get_key("X")){
+            my_debug(gameObject);
+            const angle = get_rotation_euler(gameObject);
+            const facingAngle = get_z(angle);
+            const unit_cos = math_cos((facingAngle / 360) * 2 * math_PI);
+            const unit_sin = math_sin((facingAngle / 360) * 2 * math_PI);
+            
+            const position = add_vectors( get_position(gameObject),
+                vector3(unit_cos * TurretLength, unit_sin * TurretLength, 0));
+            
+            // const position = vector3(0, 0, 0);
+            // const velocity = vector3(math_cos(facingAngle) * bulletSpeed, 
+            //     math_sin(facingAngle) * bulletSpeed, 0);
+            const velocity = vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0);
+            const scale = vector3(2, 2, 0); //set bullet size
+        
+        
+            bullet_creator(position, angle, velocity, scale);
+    } 
 });
 
 
@@ -292,16 +329,6 @@ function update_player(gameObject){
     
     
     
-    if(get_key("Q")){
-        const position = get_position(gameObject);
-        // const position = vector3(0, 0, 0);
-        const velocity = vector3(5, 0, 0);
-        const angle = vector3(0, 0, 0);
-        const scale = vector3(2, 2, 0); //set bullet size
-        
-        
-        bullet_creator(position, angle, velocity, scale);
-    } 
     
     // my_debug(gameObject);
 
