@@ -50,10 +50,35 @@ const PlayerTurretImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP
 
 const TestWallImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/test_wall.png";
 
+const BoomFireImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/boom_fire.png";
+
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
+
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
+// animation
+
+function playConsistAnim(imageUrl, duration, position, scale, euler) {
+    const body = instantiate_sprite(imageUrl);
+    let time_count = 0;
+    set_start(body, (gameObject) => {
+        set_position(position);
+        set_scale(scale);
+        set_rotation_euler(euler);
+    });
+    set_update(body, (gameObject) => {
+       time_count = time_count + delta_time();
+       if( time_count > 1) {
+           destroy(gameObject);
+       }
+    });
+}
+
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////
@@ -148,15 +173,13 @@ function is_x_wall(gameObject) {
     return true;
 }
 
-// const play_boom_anim(position) {
-//     cons
-// }
-
 
 function bulletCollisionEnter(index, bullets, bullet_collide_count) {
     return (self, other) => {
         bullet_collide_count[index] = bullet_collide_count[index] + 1;
         if( bullet_collide_count[index] === MAXCollideNum) {
+            playConsistAnim(BoomFireImageURL, 1, 
+                get_position(self), vector3(1, 1, 0), vector3(0, 0, 0)); // play booming fire
             bullets[index] = null;
             destroy(self);
             return null;
