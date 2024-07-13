@@ -200,6 +200,12 @@ function getPlayerBulletCreator(time_gap) {
             
             set_update(cur_bullet, (gameObject) => {
                 set_angular_velocity(gameObject, vector3(0, 0, 0));
+                
+                const bulletDirectionDegree = get_z(get_rotation_euler(gameObject)) + playerBulletImageDegree;
+        const unit_cos = math_cos((bulletDirectionDegree / 360) * 2 * math_PI);
+        const unit_sin = math_sin((bulletDirectionDegree / 360) * 2 * math_PI);
+                set_velocity(gameObject, vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0));
+
                 if(is_out_boundary(gameObject)) { // cross the boundary of map, destroy
                     destroy(gameObject);
                     // debug_log("destroy myself 0_0");
