@@ -15,6 +15,7 @@ import {init_unity_academy_3d, init_unity_academy_2d, set_start, set_update,
 init_unity_academy_2d();
 
 
+
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // debug related
@@ -26,11 +27,13 @@ function my_debug(gameObject) {
     
     const euler = get_rotation_euler(gameObject);
     debug_log(euler);
+    debug_log(get_velocity(gameObject));
 }
 
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
+
 
 
 ///////////////////////////////////////////////////////
@@ -40,12 +43,16 @@ const PlayerImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/
 
 const PlayerBulletImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/play_bullet.png";
 const playerBulletImageAngle = vector3(0, 0, 135);
+const playerBulletImageDegree = 135;
 
 const PlayerTurretImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/turret.png";
+
+const TestWallImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/test_wall.png";
 
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
+
 
 
 ///////////////////////////////////////////////////////
@@ -69,6 +76,7 @@ function get_game_time() {
 ///////////////////////////////////////////////////////
 
 
+
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // predicate_related
@@ -81,6 +89,8 @@ function is_out_boundary(gameObject) {
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
@@ -102,12 +112,60 @@ function is_same_vector(vec1, vec2) {
 ///////////////////////////////////////////////////////
 
 
+
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
+// wall related 
+
+const testWall = instantiate_sprite(TestWallImageURL);
+
+function getWallStart(position, scale) {
+    return (gameObject) => {
+        set_position(gameObject, position);
+        set_scale(gameObject, scale);
+    };
+}
+
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
+
+
+
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // bullet related 
 
 const bulletLayer = 17;
 const bulletSpeed = 5;
+
+function is_y_wall(gameObject) {
+    return true;
+}
+
+function bulletCollisionEnter(self, other) {
+    debug_log("1");
+        my_debug(self);
+    const self_velocity = get_velocity(self);
+    const x = get_x(self_velocity);
+    const y = get_y(self_velocity);
+    
+        const bulletDirectionDegree = get_z(get_rotation_euler(self)) + playerBulletImageDegree;
+        const reflectedBulletDirectionDegree = 180 - bulletDirectionDegree;
+        const unit_cos = math_cos((reflectedBulletDirectionDegree / 360) * 2 * math_PI);
+        const unit_sin = math_sin((reflectedBulletDirectionDegree / 360) * 2 * math_PI);
+    // const degree = add_vectors(playerBulletImageAngle, get_rotation_euler(self));
+    const degree = get_z(get_rotation_euler(self));
+    if( is_y_wall(other)) {
+        
+        translate_local(self, vector3(0, 0, -100));
+        set_velocity(self, vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0));
+        set_rotation_euler(self, vector3(0, 0, 270 - degree));
+        debug_log("2");
+        my_debug(self);
+    }
+    
+}
+
 
 //create a bullet facing $angular at $pos, with $velocity
 function getPlayerBulletCreator(time_gap) {
@@ -135,12 +193,16 @@ function getPlayerBulletCreator(time_gap) {
                 set_position(gameObject, pos);
                 
                 set_scale(gameObject, scale);
+                
+                on_collision_enter(gameObject, bulletCollisionEnter);
+                
             });
             
             set_update(cur_bullet, (gameObject) => {
+                set_angular_velocity(gameObject, vector3(0, 0, 0));
                 if(is_out_boundary(gameObject)) { // cross the boundary of map, destroy
                     destroy(gameObject);
-                    debug_log("destroy myself 0_0");
+                    // debug_log("destroy myself 0_0");
                         
                 }
             });
@@ -210,7 +272,7 @@ set_update(turret, gameObject => {
         } 
         
         if(get_key("X")){
-            my_debug(gameObject);
+            // my_debug(gameObject);
             const angle = get_rotation_euler(gameObject);
             const facingAngle = get_z(angle);
             const unit_cos = math_cos((facingAngle / 360) * 2 * math_PI);
@@ -324,7 +386,7 @@ function start_player(gameObject){
 
 function update_player(gameObject){
     cur_time = cur_time + delta_time();
-    
+    set_velocity(gameObject, vector3(0, 0, 0));
     player_move(gameObject);
     
     
@@ -341,3 +403,5 @@ function update_player(gameObject){
 const main_cam_target = get_main_camera_following_target();
 set_start(player, start_player);
 set_update(player, update_player);
+
+set_start(testWall, getWallStart(vector3(0, 0, 0), vector3(4, 4, 0)));
