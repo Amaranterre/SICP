@@ -58,10 +58,14 @@ const Player2ImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main
 const Player2TurretImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/turret2.png";
 
 const ShootFireImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/shoot_fire.png";
+
+const BackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background.jpg";
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
-
-
+const background = instantiate_sprite(BackgroundImageURL);
+remove_collider_components(background);
+set_position(background, vector3(0, 0, 100));
+set_scale(background, vector3(20, 20, 0));
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // animation
