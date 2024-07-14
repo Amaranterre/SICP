@@ -57,6 +57,7 @@ const WallImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/as
 const Player2ImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/player2.png";
 const Player2TurretImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/turret2.png";
 
+const ShootFireImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/shoot_fire.png";
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
@@ -67,6 +68,7 @@ const Player2TurretImageURL = "https://raw.githubusercontent.com/Amaranterre/SIC
 
 function playConsistAnim(imageUrl, duration, position, scale, euler) {
     const body = instantiate_sprite(imageUrl);
+    remove_collider_components(body);
     let time_count = 0;
     set_start(body, (gameObject) => {
         set_position(gameObject, position);
@@ -98,6 +100,8 @@ const direction_right = vector3(1, 0, 0);
 const direction_up = vector3(0, 1, 0);
 const direction_down = vector3(0, -1, 0);
 
+const shootFireSize = vector3(1, 1, 0);
+
 let cur_time = 0;
 function get_game_time() {
     return cur_time;
@@ -106,7 +110,7 @@ function get_game_time() {
 // layer related 
 const playerLayer = 10;
 const bulletLayer = 12;
-const turretLayer = 11;
+const turretLayer = 7;
 const shootFireLayer = 5;
 
 //--------------------------------------------------->//
@@ -278,6 +282,7 @@ function getWallStart(position, scale) {
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
+const test = instantiate_sprite(ShootFireImageURL);
 
 
 ///////////////////////////////////////////////////////
@@ -395,8 +400,11 @@ function getPlayerBulletCreator(time_gap) {
             // debug_log("not shoot");
             return null;
         } else {
+                     playConsistAnim(ShootFireImageURL, 0.5, pos , 
+                    shootFireSize , angle);
             let flag = false;
             let index = -1;
+            
             for( let i = 0; i < bullets_num; i = i + 1) {
                 if(is_null(bullets[i])) {
                     flag = true;
@@ -528,7 +536,7 @@ const position = get_turret_position(get_position(player1));
     }
 
     if (get_key("2")) {
-        // my_debug(gameObject);
+               // my_debug(gameObject);
         const angle = get_rotation_euler(gameObject);
         const facingAngle = get_z(angle);
         const unit_cos = math_cos((facingAngle / 360) * 2 * math_PI);
