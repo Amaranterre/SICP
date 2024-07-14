@@ -290,7 +290,7 @@ function getWallStart(position, scale) {
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // bullet related 
-
+const BulletForce = 10;
 const bulletSpeed = 2;
 const MAXCollideNum = 12;
 
@@ -636,7 +636,10 @@ const bullet_creator = getPlayerBulletCreator(shootGap); //set shoot gap
 
 function KillPlayer(player, murder) {
     // debug_log("someone got killed");
-    const force = scale_vector(get_rotation_euler(murder), 100);
+    const degree = ((get_z(get_rotation_euler(murder)) + 135) / 360) * 2 * math_PI;
+    const force_unit = vector3(math_cos(degree), math_sin(degree), 0 );
+    
+    const force = scale_vector(force_unit, BulletForce);
     debug_log(force);
     if( same_gameobject(player, player1)) {
         debug_log("player1 wass killed!");
