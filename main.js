@@ -78,7 +78,7 @@ function playConsistAnim(imageUrl, duration, position, scale, euler) {
     });
     set_update(body, (gameObject) => {
        time_count = time_count + delta_time();
-       if( time_count > 1) {
+       if( time_count > duration) {
            destroy(gameObject);
        }
     });
@@ -284,7 +284,7 @@ function getWallStart(position, scale) {
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
-const test = instantiate_sprite(ShootFireImageURL);
+// const test = instantiate_sprite(ShootFireImageURL);
 
 
 ///////////////////////////////////////////////////////
@@ -319,7 +319,7 @@ function is_x_wall(gameObject) {
 }
 
 function is_player(gameObject) {
-    return same_gameobject(gameObject, player1);
+    return same_gameobject(gameObject, player1) || same_gameobject(gameObject, player2);
 }
 
 function recycleBullet(bullet, position, index, bullets) {
@@ -336,8 +336,7 @@ function bulletCollisionEnter(index, bullets, bullet_collide_count) {
     return (self, other) => {
         if( is_player(other)) {
             recycleBullet(self, get_position(self), index, bullets);
-            // set_scale(other, vector3(0.8, 0.8, 0));
-            // destroy(other);
+            KillPlayer(other, self);
             return null;
         }
         
@@ -396,13 +395,13 @@ function getPlayerBulletCreator(time_gap) {
     let bullets_num = 0;
     let bullet_collide_count = [];
 
-    return (pos, angle, velocity, scale) => {
+    return (fire_pos, pos, angle, velocity, scale) => {
         // debug_log("last time: " + stringify(last_time) + " cur_time: " + stringify(get_game_time()));
         if (get_game_time() - last_time < time_gap) {
             // debug_log("not shoot");
             return null;
         } else {
-                     playConsistAnim(ShootFireImageURL, 0.5, pos , 
+                     playConsistAnim(ShootFireImageURL, 0.2, fire_pos , 
                     shootFireSize , angle);
             let flag = false;
             let index = -1;
@@ -521,6 +520,10 @@ function start_turret1 (gameObject) {
 }
 
 function update_turret1(gameObject) {
+    if(!player1LiveState) {
+        return null;
+    }
+    
 const position = get_turret_position(get_position(player1));
     
     set_position(gameObject, position);
@@ -554,7 +557,7 @@ const position = get_turret_position(get_position(player1));
         const scale = vector3(0.9, 0.9, 0); //set bullet size
 
 
-        bullet_creator(position, angle, velocity, scale);
+        bullet_creator(get_position(gameObject), position, angle, velocity, scale);
     }
 }
 
@@ -569,6 +572,9 @@ function start_turret2 (gameObject) {
 }
 
 function update_turret2(gameObject) {
+    if(!player2LiveState) {
+        return null;
+    }
     const position = get_turret_position(get_position(player2));
     
     set_position(gameObject, position);
@@ -602,7 +608,7 @@ function update_turret2(gameObject) {
         const scale = vector3(0.9, 0.9, 0); //set bullet size
 
 
-        bullet_creator(position, angle, velocity, scale);
+        bullet_creator(get_position(gameObject), position, angle, velocity, scale);
     }
 }
 
@@ -610,6 +616,9 @@ function update_turret2(gameObject) {
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
+
+let player1LiveState = true;
+let player2LiveState = true;
 
 
 ///////////////////////////////////////////////////////
@@ -623,6 +632,25 @@ const player2 = instantiate_sprite(Player2ImageURL);
 let player_speed = 1;
 
 const bullet_creator = getPlayerBulletCreator(shootGap); //set shoot gap
+
+
+function KillPlayer(player, murder) {
+    // debug_log("someone got killed");
+    const force = scale_vector(get_rotation_euler(murder), 100);
+    debug_log(force);
+    if( same_gameobject(player, player1)) {
+        debug_log("player1 wass killed!");
+        player1LiveState = false;
+        add_impulse_force(player2, force);
+        
+        add_impulse_force(player1, force);
+    } else if (same_gameobject(player, player2)) {
+        debug_log("player2 wass killed!");
+        player2LiveState = false;
+        add_impulse_force(player2, force);
+    }
+}
+
 
 
 function get_player1_move_direction() {
@@ -718,9 +746,14 @@ function start_player1(gameObject) {
 
 
 function update_player1(gameObject) {
-    
+    if(!player1LiveState) {
+        return null;
+    }
     cur_time = cur_time + delta_time();
-    set_velocity(gameObject, vector3(0, 0, 0));
+    
+    if(player1LiveState) {
+        set_velocity(gameObject, vector3(0, 0, 0));
+    }
     player_move(gameObject, get_player1_move_direction);
 
 
@@ -740,9 +773,15 @@ function start_player2(gameObject) {
 
 
 function update_player2(gameObject) {
-    
+    if(!player2LiveState) {
+        return null;
+    }
     cur_time = cur_time + delta_time();
-    set_velocity(gameObject, vector3(0, 0, 0));
+    
+    if(player2LiveState) {
+        set_velocity(gameObject, vector3(0, 0, 0));
+    }
+    
     player_move(gameObject, get_player2_move_direction);
 
 
