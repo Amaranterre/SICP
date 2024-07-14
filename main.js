@@ -103,6 +103,12 @@ function get_game_time() {
     return cur_time;
 }
 
+// layer related 
+const playerLayer = 10;
+const bulletLayer = 12;
+const turretLayer = 11;
+const shootFireLayer = 5;
+
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
@@ -278,7 +284,6 @@ function getWallStart(position, scale) {
 //<----------------------------------------------------
 // bullet related 
 
-const bulletLayer = 17;
 const bulletSpeed = 2;
 const MAXCollideNum = 12;
 
@@ -487,18 +492,28 @@ const shootGap = 2;
 //     });
 // }
 
+function get_turret_position(player_position) {
+    const x = get_x(player_position);
+    const y = get_y(player_position);
+    const z = turretLayer;
+    return vector3(x, y, z);
+    
+}  
+
+
 function start_turret1 (gameObject) {
-    set_position(gameObject, add_vectors(get_position(player1), vector3(0, 0, -1)));
-    set_scale(gameObject, turretSize);
+    const position = get_turret_position(get_position(player1));
+    
+    set_position(gameObject, position);set_scale(gameObject, turretSize);
     remove_collider_components(gameObject);
 
 
 }
 
 function update_turret1(gameObject) {
+const position = get_turret_position(get_position(player1));
     
-        set_position(gameObject, add_vectors(get_position(player1), vector3(0, 0, -1)));
-
+    set_position(gameObject, position);
 
     if (get_key("1")) {
         // debug_log("get Q");
@@ -534,7 +549,9 @@ function update_turret1(gameObject) {
 }
 
 function start_turret2 (gameObject) {
-    set_position(gameObject, add_vectors(get_position(player2), vector3(0, 0, -1)));
+    const position = get_turret_position(get_position(player2));
+    
+    set_position(gameObject, position);
     set_scale(gameObject, turretSize);
     remove_collider_components(gameObject);
 
@@ -542,9 +559,9 @@ function start_turret2 (gameObject) {
 }
 
 function update_turret2(gameObject) {
+    const position = get_turret_position(get_position(player2));
     
-        set_position(gameObject, add_vectors(get_position(player2), vector3(0, 0, -1)));
-
+    set_position(gameObject, position);
 
     if (get_key("8")) {
         // debug_log("get Q");
@@ -681,7 +698,7 @@ function player_move(gameObject, get_player_move_direction) {
 }
 
 function start_player1(gameObject) {
-    set_position(gameObject, vector3(-2, 2, -1));
+    set_position(gameObject, vector3(-2, 2, playerLayer));
     set_scale(gameObject, playerSize);
     apply_rigidbody(gameObject);
     set_use_gravity(gameObject, false);
@@ -703,7 +720,7 @@ function update_player1(gameObject) {
 }
 
 function start_player2(gameObject) {
-    set_position(gameObject, vector3(-2, 2, -1));
+    set_position(gameObject, vector3(2, -2, playerLayer));
     set_scale(gameObject, playerSize);
     apply_rigidbody(gameObject);
     set_use_gravity(gameObject, false);
