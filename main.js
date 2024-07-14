@@ -225,10 +225,14 @@ let walls = [];
 
 
 function ConstructMap() {
+    
+    
     const dataLen = array_length(wallsData);
     for(let i = 0; i < dataLen; i = i + 1) {
         
-        const position = wallsData[i][1];
+        let position = wallsData[i][1];
+        
+        
         const scale = wallsData[i][2];
         const wall = instantiate_sprite(WallImageURL);
         
@@ -273,7 +277,7 @@ function getWallStart(position, scale) {
 // bullet related 
 
 const bulletLayer = 17;
-const bulletSpeed = 5;
+const bulletSpeed = 2;
 const MAXCollideNum = 12;
 
 function is_y_wall(gameObject) {
@@ -285,16 +289,44 @@ function is_y_wall(gameObject) {
         }
     }
     
-    return true;
+    return false;
 }
 
 function is_x_wall(gameObject) {
-    return true;
+    const wallsLen = array_length(walls);
+    
+    for(let i = 0; i < wallsLen; i = i + 1) {
+        if(same_gameobject(gameObject, walls[i])) {
+            return wallsData[i][0] === 'x';
+        }
+    }
+    
+    return false;
 }
+
+function is_player(gameObject) {
+    return same_gameobject(gameObject, player1);
+}
+
+function recycleBullet(bullet, position, index, bullets) {
+    playConsistAnim(BoomFireImageURL, 1, 
+    position, vector3(1, 1, 0), vector3(0, 0, 0)); // play booming fire
+    bullets[index] = null;
+    destroy(bullet);
+    return null;
+}
+
 
 
 function bulletCollisionEnter(index, bullets, bullet_collide_count) {
     return (self, other) => {
+        if( is_player(other)) {
+            recycleBullet(self, get_position(self), index, bullets);
+            set_scale(other, vector3(0.8, 0.8, 0));
+            return null;
+        }
+        
+        
         bullet_collide_count[index] = bullet_collide_count[index] + 1;
         if( bullet_collide_count[index] === MAXCollideNum) {
             playConsistAnim(BoomFireImageURL, 1, 
@@ -324,7 +356,7 @@ function bulletCollisionEnter(index, bullets, bullet_collide_count) {
         set_rotation_euler(self, vector3(0, 0, reflectedBulletDirectionDegree - playerBulletImageDegree));
         // debug_log("2");
         // my_debug(self);
-    } else {
+    } else if( is_x_wall(other)) {
         // debug_log("x wall");
         const reflectedBulletDirectionDegree = -bulletDirectionDegree;
         const unit_cos = math_cos((reflectedBulletDirectionDegree / 360) * 2 * math_PI);
@@ -332,6 +364,9 @@ function bulletCollisionEnter(index, bullets, bullet_collide_count) {
 
         set_velocity(self, vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0));
         set_rotation_euler(self, vector3(0, 0, reflectedBulletDirectionDegree - playerBulletImageDegree));
+    } else {
+        recycleBullet(self, get_position(self), index, bullets);
+        return null;
     }
 
 };}
@@ -428,9 +463,9 @@ function getPlayerBulletCreator(time_gap) {
 const turretLayer = 15;
 const turret1 = instantiate_sprite(Player1TurretImageURL);
 
-const TurretLength = 0.3;
+const TurretLength = 0.4;
 const rotateSpeed = vector3(0, 0, 180); //180 degree per second
-const turretSize = vector3(2, 2, 0);
+const turretSize = vector3(0.8, 0.8, 0);
 
 const shootGap = 0.5;
 
@@ -488,7 +523,7 @@ function turretUpdate(gameObject) {
         // const velocity = vector3(math_cos(facingAngle) * bulletSpeed, 
         //     math_sin(facingAngle) * bulletSpeed, 0);
         const velocity = vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0);
-        const scale = vector3(0.5, 0.5, 0); //set bullet size
+        const scale = vector3(0.9, 0.9, 0); //set bullet size
 
 
         bullet_creator(position, angle, velocity, scale);
@@ -504,7 +539,7 @@ function turretUpdate(gameObject) {
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // player related
-const playerSize = vector3(1, 1, 0);
+const playerSize = vector3(0.8, 0.8, 0);
 
 const playerLayer = 16;
 const player1 = instantiate_sprite(Player1ImageURL);
