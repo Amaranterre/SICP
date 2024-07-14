@@ -146,11 +146,77 @@ function is_same_vector(vec1, vec2) {
 // map related
 
 //wallData: ['x' or 'y', position, scale]
+const UnitLength=1.02;
+const UnitWidth=UnitLength/5.41;
 const wallsData = [
-    ['x', vector3(0, -4.5, 0), vector3(2.58, 1, 0)],
-    ['x', vector3(0, 4.5, 0), vector3(2.58, 1, 0)],
-    ['y', vector3(-7, 0, 0), vector3(1.6673, 1, 0)],
-    ['y', vector3(7, 0, 0), vector3(1.6673, 1, 0)]
+    ['x', vector3(0, -4.5*UnitLength, 0), vector3(12*UnitWidth, 1, 0)],
+    ['x', vector3(0, 4.5*UnitLength, 0), vector3(12*UnitWidth, 1, 0)],
+    ['y', vector3(-6*UnitLength, 0, 0), vector3(9*UnitWidth, 1, 0)],
+    ['y', vector3(6*UnitLength, 0, 0), vector3(9*UnitWidth, 1, 0)],
+    
+    ['x', vector3(-4.5*UnitLength, -3.5*UnitLength, 0), vector3(3*UnitWidth, 0.6, 0)],
+    ['x', vector3(UnitLength, -3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(5*UnitLength, -3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(-2.5*UnitLength, -2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(0.5*UnitLength, -2.5*UnitLength, 0), vector3(3*UnitWidth, 0.6, 0)],
+    ['x', vector3(3.5*UnitLength, -2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(5.5*UnitLength, -2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(-5*UnitLength, -1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(-2*UnitLength, -1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(UnitLength, -1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(3.5*UnitLength, -1.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(5.5*UnitLength, -1.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(-1.5*UnitLength, -0.5*UnitLength, 0), vector3(3*UnitWidth, 0.6, 0)],
+    ['x', vector3(2*UnitLength, -0.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(-5.5*UnitLength, 0.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(-2.5*UnitLength, 0.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(4*UnitLength, 0.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(-5*UnitLength, 1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(0.5*UnitLength, 1.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(2.5*UnitLength, 1.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(5.5*UnitLength, 1.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(-5.5*UnitLength, 2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(-3.5*UnitLength, 2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(0.5*UnitLength, 2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(4.5*UnitLength, 2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(-4.5*UnitLength, 3.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['x', vector3(1.5*UnitLength, 3.5*UnitLength, 0), vector3(5*UnitWidth, 0.6, 0)],
+    
+    
+    
+    ['y', vector3(-5*UnitLength, -3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(-5*UnitLength, -0.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(-4*UnitLength, -3*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-4*UnitLength, -UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-4*UnitLength, UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-4*UnitLength, 3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(-3*UnitLength, -3*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-3*UnitLength, UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-3*UnitLength, 3*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-2*UnitLength, -3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(-2*UnitLength, -UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-2*UnitLength, 2.5*UnitLength, 0), vector3(4*UnitWidth, 0.6, 0)],
+    ['y', vector3(-UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-UnitLength, 1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(0, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(0, -1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(0, UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(UnitLength, -1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(UnitLength, 1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(UnitLength, 4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(2*UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(2*UnitLength, 2*UnitLength, 0), vector3(3*UnitWidth, 0.6, 0)],
+    ['y', vector3(3*UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(3*UnitLength, -2*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(3*UnitLength, 2.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(4*UnitLength, -2*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(4*UnitLength, 0, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(4*UnitLength, 2*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(5*UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(5*UnitLength, -UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(5*UnitLength, 2*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(5*UnitLength, 4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)]
 ]; 
 
 let walls = [];
@@ -361,7 +427,7 @@ function getPlayerBulletCreator(time_gap) {
 const turretLayer = 15;
 const turret = instantiate_sprite(PlayerTurretImageURL);
 
-const TurretLength = 2;
+const TurretLength = 0.3;
 const rotateSpeed = vector3(0, 0, 180); //180 degree per second
 
 const shootGap = 0.5;
@@ -383,6 +449,7 @@ const shootGap = 0.5;
 
 set_start(turret, gameObject => {
     set_position(gameObject, get_position(player));
+    set_scale(gameObject, vector3(0.1, 0.1, 0));
     remove_collider_components(gameObject);
 
     set_custom_prop(gameObject, "layer", turretLayer); // drawing order
@@ -419,7 +486,7 @@ set_update(turret, gameObject => {
         // const velocity = vector3(math_cos(facingAngle) * bulletSpeed, 
         //     math_sin(facingAngle) * bulletSpeed, 0);
         const velocity = vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0);
-        const scale = vector3(3, 3, 0); //set bullet size
+        const scale = vector3(0.5, 0.5, 0); //set bullet size
 
 
         bullet_creator(position, angle, velocity, scale);
@@ -437,7 +504,7 @@ set_update(turret, gameObject => {
 // player related
 const playerLayer = 16;
 const player = instantiate_sprite(PlayerImageURL);
-let player_speed = 3;
+let player_speed = 1;
 
 const bullet_creator = getPlayerBulletCreator(shootGap); //set shoot gap
 
@@ -483,10 +550,8 @@ function player_move_rotate(gameObject, move_direction) {
     if (!is_same_vector(move_direction, vector3(0, 0, 0))) { //when moving
         const degree = get_face_degree(move_direction);
 
-        set_scale(gameObject, vector3(1.05, 0.95, 0.95));
         set_rotation_euler(gameObject, vector3(0, 0, degree));
     } else { //not moving
-        set_scale(gameObject, vector3(1, 1, 1));
         set_rotation_euler(gameObject, vector3(0, 0, 0));
     }
 }
@@ -509,7 +574,7 @@ function player_move(gameObject) {
 
 function start_player(gameObject) {
     set_position(gameObject, vector3(-2, 2, 0));
-    set_scale(gameObject, vector3(0.5, 0.5, 1));
+    set_scale(gameObject, vector3(0.1, 0.1, 1));
     apply_rigidbody(gameObject);
     set_use_gravity(gameObject, false);
 
