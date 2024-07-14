@@ -54,6 +54,8 @@ const BoomFireImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/mai
 
 const WallImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/wall.png";
 
+const Player2ImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/player2.png";
+const Player2TurretImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/turret2.png";
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
@@ -322,7 +324,8 @@ function bulletCollisionEnter(index, bullets, bullet_collide_count) {
     return (self, other) => {
         if( is_player(other)) {
             recycleBullet(self, get_position(self), index, bullets);
-            set_scale(other, vector3(0.8, 0.8, 0));
+            // set_scale(other, vector3(0.8, 0.8, 0));
+            // destroy(other);
             return null;
         }
         
@@ -460,14 +463,14 @@ function getPlayerBulletCreator(time_gap) {
 //<----------------------------------------------------
 // turret related
 
-const turretLayer = 15;
 const turret1 = instantiate_sprite(Player1TurretImageURL);
+const turret2 = instantiate_sprite(Player2TurretImageURL);
 
 const TurretLength = 0.4;
 const rotateSpeed = vector3(0, 0, 180); //180 degree per second
 const turretSize = vector3(0.8, 0.8, 0);
 
-const shootGap = 0.5;
+const shootGap = 2;
 
 // function CreateTurret(tank) { //if using CreateTurret, layer will not be applied correctly, so create turret directly
 //     const turret = instantiate_sprite(PlayerTurretImageURL);
@@ -484,7 +487,7 @@ const shootGap = 0.5;
 //     });
 // }
 
-function turretStart (gameObject) {
+function start_turret1 (gameObject) {
     set_position(gameObject, add_vectors(get_position(player1), vector3(0, 0, -1)));
     set_scale(gameObject, turretSize);
     remove_collider_components(gameObject);
@@ -492,24 +495,70 @@ function turretStart (gameObject) {
 
 }
 
-function turretUpdate(gameObject) {
+function update_turret1(gameObject) {
     
         set_position(gameObject, add_vectors(get_position(player1), vector3(0, 0, -1)));
 
 
-    if (get_key("Q")) {
+    if (get_key("1")) {
         // debug_log("get Q");
         const curEuler = get_rotation_euler(gameObject);
         set_rotation_euler(gameObject,
             add_vectors(curEuler, scale_vector(rotateSpeed, delta_time())));
-    } else if (get_key("E")) {
+    } else if (get_key("3")) {
         // debug_log("get Q");
         const curEuler = get_rotation_euler(gameObject);
         set_rotation_euler(gameObject,
             add_vectors(curEuler, scale_vector(rotateSpeed, -delta_time())));
     }
 
-    if (get_key("X")) {
+    if (get_key("2")) {
+        // my_debug(gameObject);
+        const angle = get_rotation_euler(gameObject);
+        const facingAngle = get_z(angle);
+        const unit_cos = math_cos((facingAngle / 360) * 2 * math_PI);
+        const unit_sin = math_sin((facingAngle / 360) * 2 * math_PI);
+
+        const position = add_vectors(get_position(gameObject),
+            vector3(unit_cos * TurretLength, unit_sin * TurretLength, 0));
+
+        // const position = vector3(0, 0, 0);
+        // const velocity = vector3(math_cos(facingAngle) * bulletSpeed, 
+        //     math_sin(facingAngle) * bulletSpeed, 0);
+        const velocity = vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0);
+        const scale = vector3(0.9, 0.9, 0); //set bullet size
+
+
+        bullet_creator(position, angle, velocity, scale);
+    }
+}
+
+function start_turret2 (gameObject) {
+    set_position(gameObject, add_vectors(get_position(player2), vector3(0, 0, -1)));
+    set_scale(gameObject, turretSize);
+    remove_collider_components(gameObject);
+
+
+}
+
+function update_turret2(gameObject) {
+    
+        set_position(gameObject, add_vectors(get_position(player2), vector3(0, 0, -1)));
+
+
+    if (get_key("8")) {
+        // debug_log("get Q");
+        const curEuler = get_rotation_euler(gameObject);
+        set_rotation_euler(gameObject,
+            add_vectors(curEuler, scale_vector(rotateSpeed, delta_time())));
+    } else if (get_key("0")) {
+        // debug_log("get Q");
+        const curEuler = get_rotation_euler(gameObject);
+        set_rotation_euler(gameObject,
+            add_vectors(curEuler, scale_vector(rotateSpeed, -delta_time())));
+    }
+
+    if (get_key("9")) {
         // my_debug(gameObject);
         const angle = get_rotation_euler(gameObject);
         const facingAngle = get_z(angle);
@@ -541,14 +590,15 @@ function turretUpdate(gameObject) {
 // player related
 const playerSize = vector3(0.8, 0.8, 0);
 
-const playerLayer = 16;
 const player1 = instantiate_sprite(Player1ImageURL);
+const player2 = instantiate_sprite(Player2ImageURL);
+
 let player_speed = 1;
 
 const bullet_creator = getPlayerBulletCreator(shootGap); //set shoot gap
 
 
-function get_player_move_direction() {
+function get_player1_move_direction() {
     let direction = vector3(0, 0, 0);
     if (get_key("A")) {
         direction = add_vectors(direction_left, direction);
@@ -560,6 +610,23 @@ function get_player_move_direction() {
         direction = add_vectors(direction_up, direction);
     }
     if (get_key("S")) {
+        direction = add_vectors(direction_down, direction);
+    }
+    return direction;
+}
+
+function get_player2_move_direction() {
+    let direction = vector3(0, 0, 0);
+    if (get_key("J")) {
+        direction = add_vectors(direction_left, direction);
+    }
+    if (get_key("L")) {
+        direction = add_vectors(direction_right, direction);
+    }
+    if (get_key("I")) {
+        direction = add_vectors(direction_up, direction);
+    }
+    if (get_key("K")) {
         direction = add_vectors(direction_down, direction);
     }
     return direction;
@@ -595,14 +662,16 @@ function player_move_rotate(gameObject, move_direction) {
     }
 }
 
-function player_move(gameObject) {
+function player_move(gameObject, get_player_move_direction) {
     let move_direction = vector3(0, 0, 0);
 
     move_direction = get_player_move_direction(); // get move direction
 
+    const speedCorrection = is_same_vector(abs_vector(move_direction), vector3(1, 1, 0)) ? math_sqrt(3) : 1;
+
     translate_world(gameObject,
         scale_vector(move_direction,
-            delta_time() * player_speed * magnitude(move_direction)));
+            delta_time() * player_speed / speedCorrection));
     // move by direction
 
     player_move_rotate(gameObject, move_direction); // rotate player depending on 
@@ -611,23 +680,21 @@ function player_move(gameObject) {
 
 }
 
-function start_player(gameObject) {
+function start_player1(gameObject) {
     set_position(gameObject, vector3(-2, 2, -1));
     set_scale(gameObject, playerSize);
     apply_rigidbody(gameObject);
     set_use_gravity(gameObject, false);
 
-    set_custom_prop(gameObject, "layer", playerLayer);
 }
 
 
 
-function update_player(gameObject) {
+function update_player1(gameObject) {
     
     cur_time = cur_time + delta_time();
     set_velocity(gameObject, vector3(0, 0, 0));
-    player_move(gameObject);
-    set_custom_prop(gameObject, "layer", playerLayer);
+    player_move(gameObject, get_player1_move_direction);
 
 
 
@@ -635,17 +702,44 @@ function update_player(gameObject) {
 
 }
 
+function start_player2(gameObject) {
+    set_position(gameObject, vector3(-2, 2, -1));
+    set_scale(gameObject, playerSize);
+    apply_rigidbody(gameObject);
+    set_use_gravity(gameObject, false);
+
+}
+
+
+
+function update_player2(gameObject) {
+    
+    cur_time = cur_time + delta_time();
+    set_velocity(gameObject, vector3(0, 0, 0));
+    player_move(gameObject, get_player2_move_direction);
+
+
+
+    // my_debug(gameObject);
+
+}
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
 const main_cam_target = get_main_camera_following_target();
 
-set_start(turret1, turretStart);
-set_update(turret1, turretUpdate);
+set_start(turret1, start_turret1);
+set_update(turret1, update_turret1);
 
-set_start(player1, start_player);
-set_update(player1, update_player);
+set_start(turret2, start_turret2);
+set_update(turret2, update_turret2);
+
+set_start(player1, start_player1);
+set_update(player1, update_player1);
+
+set_start(player2, start_player2);
+set_update(player2, update_player2);
 
 
 
