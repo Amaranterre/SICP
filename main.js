@@ -167,7 +167,7 @@ const wallsData = [
     ['y', vector3(-6*UnitLength, 0, 0), vector3(9*UnitWidth, 1, 0)],
     ['y', vector3(6*UnitLength, 0, 0), vector3(9*UnitWidth, 1, 0)],
     
-    ['x', vector3(-4.5*UnitLength, -3.5*UnitLength, 0), vector3(3*UnitWidth, 0.6, 0)],
+    ['x', vector3(-4*UnitLength, -3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
     ['x', vector3(UnitLength, -3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
     ['x', vector3(5*UnitLength, -3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
     ['x', vector3(-2.5*UnitLength, -2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
@@ -179,7 +179,7 @@ const wallsData = [
     ['x', vector3(UnitLength, -1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
     ['x', vector3(3.5*UnitLength, -1.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['x', vector3(5.5*UnitLength, -1.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
-    ['x', vector3(-1.5*UnitLength, -0.5*UnitLength, 0), vector3(3*UnitWidth, 0.6, 0)],
+    ['x', vector3(-3*UnitLength, -0.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
     ['x', vector3(2*UnitLength, -0.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
     ['x', vector3(-5.5*UnitLength, 0.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['x', vector3(-2.5*UnitLength, 0.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
@@ -194,10 +194,11 @@ const wallsData = [
     ['x', vector3(4.5*UnitLength, 2.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['x', vector3(-4.5*UnitLength, 3.5*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['x', vector3(1.5*UnitLength, 3.5*UnitLength, 0), vector3(5*UnitWidth, 0.6, 0)],
+    ['x', vector3(0, 0.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['x', vector3(0, -0.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],    
     
     
-    
-    ['y', vector3(-5*UnitLength, -3.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(-5*UnitLength, -3*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(-5*UnitLength, -0.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
     ['y', vector3(-4*UnitLength, -3*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(-4*UnitLength, -UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
@@ -212,11 +213,10 @@ const wallsData = [
     ['y', vector3(-UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(-UnitLength, 1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
     ['y', vector3(0, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
-    ['y', vector3(0, -1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
-    ['y', vector3(0, UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(0, -2*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(UnitLength, -1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
-    ['y', vector3(UnitLength, 1.5*UnitLength, 0), vector3(2*UnitWidth, 0.6, 0)],
+    ['y', vector3(UnitLength, 2*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(UnitLength, 4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(2*UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(2*UnitLength, 2*UnitLength, 0), vector3(3*UnitWidth, 0.6, 0)],
@@ -229,8 +229,10 @@ const wallsData = [
     ['y', vector3(5*UnitLength, -4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(5*UnitLength, -UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
     ['y', vector3(5*UnitLength, 2*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
-    ['y', vector3(5*UnitLength, 4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)]
-]; 
+    ['y', vector3(5*UnitLength, 4*UnitLength, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(-UnitLength, 0, 0), vector3(UnitWidth, 0.6, 0)],
+    ['y', vector3(UnitLength, 0, 0), vector3(UnitWidth, 0.6, 0)]
+];
 
 let walls = [];
 
