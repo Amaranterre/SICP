@@ -9,7 +9,8 @@ import {
     on_collision_enter, on_collision_stay, on_collision_exit,
     get_main_camera_following_target, vector3, get_x, get_y, vector_difference,
     add_vectors, scale_vector, normalize, debug_log, get_z, magnitude,
-    remove_collider_components, set_custom_prop, translate_local, get_custom_prop
+    remove_collider_components, set_custom_prop, translate_local, 
+    get_custom_prop, instantiate_empty
 }
     from "unity_academy";
 
@@ -59,18 +60,18 @@ const Player2TurretImageURL = "https://raw.githubusercontent.com/Amaranterre/SIC
 
 const ShootFireImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/shoot_fire.png";
 
-const BackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background.jpg";
+const WhitePaperBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/white_paper_background.jpg";
+
+const StartBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/start_background.jpg";
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
-const background = instantiate_sprite(BackgroundImageURL);
-remove_collider_components(background);
-set_position(background, vector3(0, 0, 100));
-set_scale(background, vector3(20, 20, 0));
+
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // animation
 
 function playConsistAnim(imageUrl, duration, position, scale, euler) {
+    debug_log(position);
     const body = instantiate_sprite(imageUrl);
     remove_collider_components(body);
     let time_count = 0;
@@ -157,6 +158,50 @@ function is_same_vector(vec1, vec2) {
 ///////////////////////////////////////////////////////
 
 
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
+// gameprocess related
+const stage = 0;
+
+const GameController = instantiate_empty();
+
+function start_GameController(gameObject) {
+    change_background(StartBackgroundImageURL, startBackgroundPosition, startBackgroundScale);
+    ConstructMap(startGameMap);
+    // change_walls(startGameMap);
+        
+}
+
+
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////
+//<----------------------------------------------------
+// background related
+let background = instantiate_empty();
+
+const whitePaperPosition = vector3(0, 0, 100);
+const whitePaperScale = vector3(20, 20, 0);
+
+const startBackgroundPosition = vector3(0, 0, 100);
+const startBackgroundScale = vector3(1.2, 1, 0);
+
+function change_background(new_url, position, scale) {
+    destroy(background);
+    background = instantiate_sprite(new_url);
+    
+    remove_collider_components(background);
+    set_position(background, position);
+    set_scale(background, scale);
+}
+
+//--------------------------------------------------->//
+///////////////////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
@@ -165,7 +210,10 @@ function is_same_vector(vec1, vec2) {
 //wallData: ['x' or 'y', position, scale]
 const UnitLength=1.02;
 const UnitWidth=UnitLength/5.41;
-const wallsData = [
+
+const startGameMap = [];
+
+const FirstGameMap = [
     ['x', vector3(0, -4.5*UnitLength, 0), vector3(12*UnitWidth, 1, 0)],
     ['x', vector3(0, 4.5*UnitLength, 0), vector3(12*UnitWidth, 1, 0)],
     ['y', vector3(-6*UnitLength, 0, 0), vector3(9*UnitWidth, 1, 0)],
@@ -238,31 +286,35 @@ const wallsData = [
     ['y', vector3(UnitLength, 0, 0), vector3(UnitWidth, 0.6, 0)]
 ];
 
+let curWallsData = [];
+let curWallsObject = [];
+
 let walls = [];
 
 
 
-function ConstructMap() {
+function ConstructMap(walls) {
     
     
-    const dataLen = array_length(wallsData);
+    const dataLen = array_length(walls);
     for(let i = 0; i < dataLen; i = i + 1) {
         
-        let position = wallsData[i][1];
+        let position = walls[i][1];
         
         
-        const scale = wallsData[i][2];
+        const scale = walls[i][2];
         const wall = instantiate_sprite(WallImageURL);
         
         debug_log(position);
         set_position(wall, position);
         set_scale(wall, scale);
         
-        if(wallsData[i][0] === 'y') {
+        if(walls[i][0] === 'y') {
             set_rotation_euler(wall, vector3(0, 0, 90));
         }   
         
-        walls[i] = wall;
+        curWallsObject[i] = wall;
+        curWallsData[i] = walls[i];
     }
 }
 
@@ -299,11 +351,11 @@ const bulletSpeed = 2;
 const MAXCollideNum = 12;
 
 function is_y_wall(gameObject) {
-    const wallsLen = array_length(walls);
+    const wallsLen = array_length(curWallsObject);
     // debug_log("check y wall");
     for(let i = 0; i < wallsLen; i = i + 1) {
-        if(same_gameobject(gameObject, walls[i])) {
-            return wallsData[i][0] === 'y';
+        if(same_gameobject(gameObject, curWallsObject[i])) {
+            return curWallsData[i][0] === 'y';
         }
     }
     
@@ -311,11 +363,11 @@ function is_y_wall(gameObject) {
 }
 
 function is_x_wall(gameObject) {
-    const wallsLen = array_length(walls);
+    const wallsLen = array_length(curWallsObject);
     
     for(let i = 0; i < wallsLen; i = i + 1) {
-        if(same_gameobject(gameObject, walls[i])) {
-            return wallsData[i][0] === 'x';
+        if(same_gameobject(gameObject, curWallsObject[i])) {
+            return curWallsData[i][0] === 'x';
         }
     }
     
@@ -523,6 +575,15 @@ function start_turret1 (gameObject) {
 
 }
 
+function get_shoot_fire_position(position) {
+    const x = get_x(position);
+    const y = get_y(position);
+    const z = shootFireLayer;
+    return vector3(x, y, z);
+    
+}
+
+
 function update_turret1(gameObject) {
     if(!player1LiveState) {
         return null;
@@ -560,8 +621,10 @@ const position = get_turret_position(get_position(player1));
         const velocity = vector3(unit_cos * bulletSpeed, unit_sin * bulletSpeed, 0);
         const scale = vector3(0.9, 0.9, 0); //set bullet size
 
+        const shoot_fire_position = get_shoot_fire_position(get_position(gameObject));
 
-        bullet_creator(get_position(gameObject), position, angle, velocity, scale);
+        bullet_creator(shoot_fire_position, 
+            position, angle, velocity, scale);
     }
 }
 
@@ -802,6 +865,9 @@ function update_player2(gameObject) {
 
 const main_cam_target = get_main_camera_following_target();
 
+
+set_start(GameController, start_GameController);
+
 set_start(turret1, start_turret1);
 set_update(turret1, update_turret1);
 
@@ -818,5 +884,3 @@ set_update(player2, update_player2);
 
 
 // set_start(testWall, getWallStart(vector3(0, 0, 0), vector3(4, 4, 0)));
-
-ConstructMap();
