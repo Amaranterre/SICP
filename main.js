@@ -173,6 +173,7 @@ const initialPlayer2Position = vector3(2, 0, playerLayer);
 
 let PeaceMode = true;
 let gameStage = 0;
+let is_start_game = false;
 
 const GameController = instantiate_empty();
 
@@ -372,24 +373,32 @@ function ChangeMap(walls) {
         }
     });
     set_update(mapChanger, gameObject => {
-        // debug_log("change map update function");
+        debug_log(is_start_game);
         timer = timer + delta_time();
-        if(timer > 1.5) {
+        if(timer > 3) {
             debug_log("change map update timed function");
             let tempObject = [];
             
-            for(let i = 0; i < curDataLen; i = i + 1) {
+         
+                for(let i = 0; i < curDataLen; i = i + 1) {
                 tempObject[i] = curWallsObject[i];
                 remove_collider_components(curWallsObject[i]);
                 curWallsData[i] = null;
                 curWallsObject[i] = null;
             }
             for(let i = 0; i < curDataLen; i = i + 1) {
-                destroy(tempObject[i]);
+                if(!is_null(tempObject[i])) {
+                    destroy(tempObject[i]);
+                }
             }
-            destroy(mapChanger);
-            destroy(startButton);
             
+            
+            destroy(mapChanger);
+            if( ! is_start_game) {
+            destroy(startButton);
+            }
+            
+            debug_log("start to construct map");
             ConstructMap(walls);
             
             PeaceMode = false;
@@ -402,6 +411,7 @@ function ChangeMap(walls) {
         
         set_position(player1, initialPlayer1Position);
         set_position(player2, initialPlayer2Position);
+        is_start_game = true;
         }
         
     });
