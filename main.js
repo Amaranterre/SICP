@@ -71,6 +71,10 @@ const DesserBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/
 const GrasslandBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background_grassland.png";
 
 const SnowlandBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background_snowland.png";
+
+const KImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/K.png";
+
+const OImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/O.png";
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
@@ -95,6 +99,75 @@ function playConsistAnim(imageUrl, duration, position, scale, euler) {
            destroy(gameObject);
        }
     });
+}
+
+const KLastTime = 0.5;
+const KInitialPosition = vector3(-1, 0, 99);
+const KInitialScaleNumber = 10;
+const KEndScaleNumber = 5;
+
+const OLastTime = 0.5;
+const OInitialPosition = vector3(1.1, 0.25, 99);
+const OInitialScaleNumber = 10;
+const OEndScaleNumber = 5;
+
+
+const GapTime = 1;
+function playKAnimation(K, time) {
+    const scale = KInitialScaleNumber - 
+        (time/KLastTime) * (KInitialScaleNumber - KEndScaleNumber);
+    // debug_log(scale);
+    // debug_log("scale");
+    set_scale(K, vector3(scale, scale, 0));
+}
+function playOAnimation(O, time) {
+    time = time - KLastTime;
+    const scale = OInitialScaleNumber - 
+        (time/OLastTime) * (OInitialScaleNumber - OEndScaleNumber);
+    // debug_log(scale);
+    // debug_log("scale");
+    set_scale(O, vector3(scale, scale, 0));
+}
+function playKOAnimatino() {
+    let K = instantiate_empty();
+    let O = instantiate_empty();
+    const controller = instantiate_empty();
+    
+    let time = 0;
+    let is_K_start = false;
+    let is_O_start = false;
+    
+    
+    set_start(controller, gameObject => {});
+    set_update(controller, gameObject => {
+       time = time + delta_time();
+       if( time < KLastTime) {
+           if( is_K_start === false) {
+               is_K_start = true;
+               K = instantiate_sprite(KImageURL);
+               remove_collider_components(K);
+               set_position(K, KInitialPosition);
+              set_scale(K, vector3(KInitialScaleNumber , KInitialScaleNumber , 0));
+            //   set_scale(K, vector3(1 , 1 , 0));
+           }
+           playKAnimation(K, time);
+       } else if( time >= KLastTime && time < KLastTime + OLastTime) {
+           if( is_O_start === false ) {
+               is_O_start = true;
+               O = instantiate_sprite(OImageURL);
+               remove_collider_components(O);
+               set_position(O, OInitialPosition);
+              set_scale(O, vector3(OInitialScaleNumber , OInitialScaleNumber , 0));
+           }
+           playOAnimation(O, time);
+       } else if( time > GapTime + KLastTime + OLastTime){
+            destroy(K);
+    destroy(O);
+    destroy(controller);
+       }
+    });
+    
+   
 }
 
 //--------------------------------------------------->//
@@ -205,6 +278,7 @@ function setStartButton() {
 }
 
 function start_GameController(gameObject) {
+    // playKOAnimatino();
     change_background(StartBackgroundImageURL, startBackgroundPosition, startBackgroundScale);
     ConstructMap(startGameMap);
     
@@ -216,7 +290,15 @@ function start_GameController(gameObject) {
 
 let is_changing_map = false;
 
+// let test_flag = false;
 function update_GameController(gameObject) {
+    
+    
+    // if(get_key("Space") && !test_flag) {
+    //     playKOAnimatino();
+    //     test_flag = true;
+    // }
+    
     // debug_log("game stage: ");
     // debug_log(gameStage );
     if( gameStage === 1 && !is_changing_map) {
@@ -880,6 +962,7 @@ function KillPlayer(player, murder) {
         return null;
     }
     gameStage = 1;
+    playKOAnimatino();
     // debug_log("someone got killed");
     const degree = ((get_z(get_rotation_euler(murder)) + 135) / 360) * 2 * math_PI;
     const force_unit = vector3(math_cos(degree), math_sin(degree), 0 );
