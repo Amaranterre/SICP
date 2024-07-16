@@ -62,7 +62,7 @@ const ShootFireImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/ma
 
 const WhitePaperBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/white_paper_background.jpg";
 
-const StartBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/start_background2.png";
+const StartBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background4.png";
 
 const StartButtonImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/start_button.png";
 //--------------------------------------------------->//
@@ -215,6 +215,7 @@ function update_GameController(gameObject) {
     // debug_log(gameStage );
     if( gameStage === 1 && !is_changing_map) {
         is_changing_map = true;
+        
         ChangeMap(FirstGameMap);
         change_background(WhitePaperBackgroundImageURL, whitePaperPosition, whitePaperScale);
     }
@@ -234,8 +235,8 @@ let background = instantiate_empty();
 const whitePaperPosition = vector3(0, 0, 100);
 const whitePaperScale = vector3(20, 20, 0);
 
-const startBackgroundPosition = vector3(0, 0, 100);
-const startBackgroundScale = vector3(1.2, 1, 0);
+const startBackgroundPosition = vector3(-0.3, -1.4, 100);
+const startBackgroundScale = vector3(0.52, 0.4, 0);
 
 function change_background(new_url, position, scale) {
     destroy(background);
@@ -264,10 +265,10 @@ const startGameMap = [
     ['y', vector3(-11*UnitCoodination, 0, 0), vector3(10*UnitLength, 1, 0)],
     ['y', vector3(11*UnitCoodination, 0, 0), vector3(10*UnitLength, 1, 0)],
     
-    ['x', vector3(0 * UnitCoodination, -1.2 * UnitCoodination, 0), vector3(5*UnitLength, 1, 0)],
-    ['x', vector3(-0.5 * UnitCoodination, -2.2 * UnitCoodination, 0), vector3(4*UnitLength, 1, 0)],
-    ['y', vector3(2.5 * UnitCoodination, -2.45 * UnitCoodination, 0), vector3(2.5*UnitLength, 1, 0)],
-    ['y', vector3(1.5 * UnitCoodination, -2.95 * UnitCoodination, 0), vector3(1.5*UnitLength, 1, 0)]
+    ['x', vector3(0.4 * UnitCoodination, -1.5 * UnitCoodination, 0), vector3(5*UnitLength, 1, 0)],
+    ['x', vector3(-0.1 * UnitCoodination, -2.5 * UnitCoodination, 0), vector3(4*UnitLength, 1, 0)],
+    ['y', vector3(2.9 * UnitCoodination, -2.75 * UnitCoodination, 0), vector3(2.5*UnitLength, 1, 0)],
+    ['y', vector3(1.9 * UnitCoodination, -3.25 * UnitCoodination, 0), vector3(1.5*UnitLength, 1, 0)]
 ];
 
 const FirstGameMap = [
@@ -672,7 +673,7 @@ function getPlayerBulletCreator(time_gap) {
 const turret1 = instantiate_sprite(Player1TurretImageURL);
 const turret2 = instantiate_sprite(Player2TurretImageURL);
 
-const TurretLength = 0.4;
+const TurretLength = 0.34;
 const rotateSpeed = vector3(0, 0, 180); //180 degree per second
 const turretSize = vector3(0.8, 0.8, 0);
 
