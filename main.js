@@ -65,6 +65,12 @@ const WhitePaperBackgroundImageURL = "https://raw.githubusercontent.com/Amarante
 const StartBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background4.png";
 
 const StartButtonImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/start_button.png";
+
+const DesserBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background_dessert.png";
+
+const GrasslandBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background_grassland.png";
+
+const SnowlandBackgroundImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/background_snowland.png";
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
 
@@ -217,10 +223,29 @@ function update_GameController(gameObject) {
         is_changing_map = true;
         
         ChangeMap(FirstGameMap);
-        change_background(WhitePaperBackgroundImageURL, whitePaperPosition, whitePaperScale);
+        // change_background(WhitePaperBackgroundImageURL, whitePaperPosition, whitePaperScale);
+        
+    
+        RandomChangeBackground();
     }
 }
 
+function RandomChangeBackground() {
+    const cur = math_floor(math_random() * 3);
+    
+    if(cur === 0) {
+            change_background(DesserBackgroundImageURL, desserBackgroundPosition, desserBackgroundScale);
+
+    } else if( cur === 1) {
+            change_background(GrasslandBackgroundImageURL, grasslandBackgroundPosition, grasslandBackgroundScale);
+
+    } else if( cur === 2) {
+            change_background(SnowlandBackgroundImageURL, snowlandBackgroundPosition, snowlandBackgroundScale);
+
+    }
+    
+    // change_background(DesserBackgroundImageURL, desserBackgroundPosition, desserBackgroundScale);
+}
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
@@ -234,6 +259,15 @@ let background = instantiate_empty();
 
 const whitePaperPosition = vector3(0, 0, 100);
 const whitePaperScale = vector3(20, 20, 0);
+
+const desserBackgroundPosition = vector3(0, 0, 100);
+const desserBackgroundScale = vector3(1.5, 1.3, 0);
+
+const grasslandBackgroundPosition = vector3(0, 0, 100);
+const grasslandBackgroundScale = vector3(1.5, 1.3, 0);
+
+const snowlandBackgroundPosition = vector3(0, 0, 100);
+const snowlandBackgroundScale = vector3(1.5, 1.3, 0);
 
 const startBackgroundPosition = vector3(-0.3, -1.4, 100);
 const startBackgroundScale = vector3(0.52, 0.4, 0);
@@ -1002,6 +1036,9 @@ function update_player2(gameObject) {
     // my_debug(gameObject);
 
 }
+
+
+math_random(1, 5);
 
 //--------------------------------------------------->//
 ///////////////////////////////////////////////////////
