@@ -1,3 +1,4 @@
+
 import {
     init_unity_academy_3d, init_unity_academy_2d, set_start, set_update,
     instantiate, delta_time, instantiate_sprite, same_gameobject, destroy,
@@ -10,7 +11,7 @@ import {
     get_main_camera_following_target, vector3, get_x, get_y, vector_difference,
     add_vectors, scale_vector, normalize, debug_log, get_z, magnitude,
     remove_collider_components, set_custom_prop, translate_local, 
-    get_custom_prop, instantiate_empty
+    get_custom_prop, instantiate_empty, gui_label
 }
     from "unity_academy";
 
@@ -41,6 +42,9 @@ function my_debug(gameObject) {
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // image asset
+const Player1guiURL= "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/tankIcon2.png";
+const Player2guiURL= "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/tankIcon1.png";
+
 const Player1ImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/player1.png";
 
 const PlayerBulletImageURL = "https://raw.githubusercontent.com/Amaranterre/SICP/main/asset/play_bullet.png";
@@ -313,10 +317,18 @@ function update_GameController(gameObject) {
     
     // debug_log("game stage: ");
     // debug_log(gameStage );
+    if(is_start_game === true ) {
+        gui_label("<size=80>"+"<color=#000000ff>" + stringify(score1) + "</color>"+"</size>",200,150);
+        gui_label("<size=80>"+"<color=#000000ff>" + stringify(score2) + "</color>"+"</size>",200,650);
+        
+    }
+    
     if( gameStage === 1 && !is_changing_map) {
         is_changing_map = true;
         
         RandomChangeMap();
+        
+        
         // ChangeMap(FirstGameMap);
         // ChangeMap(SecondGameMap);
         // change_background(WhitePaperBackgroundImageURL, whitePaperPosition, whitePaperScale);
@@ -625,8 +637,13 @@ function ChangeMap(walls) {
             destroy(mapChanger);
             if( ! is_start_game) {
                 destroy(startButton);
-                player1Position = vector3(4, -4, playerLayer);
-                player2Position = vector3(-4 ,4, playerLayer);
+                player1Position = vector3(-4, 4, playerLayer);
+                player2Position = vector3(4 ,-4, playerLayer);
+                
+                const player1gui=instantiate_sprite(Player1guiURL);
+        const player2gui=instantiate_sprite(Player2guiURL);
+                set_position(player1gui,vector3(-9,-4,10));
+            set_position(player2gui,vector3(-9,4,10));
             }
             
             debug_log("start to construct map");
@@ -1058,6 +1075,9 @@ let player2LiveState = true;
 ///////////////////////////////////////////////////////
 //<----------------------------------------------------
 // player related
+let score1 = 0;
+let score2 = 0;
+
 const playerSize = vector3(0.8, 0.8, 0);
 
 const player1 = instantiate_sprite(Player1ImageURL);
@@ -1074,6 +1094,11 @@ let player2Position = initialPlayer2Position;
 function KillPlayer(player, murder) {
     if(isInPeace()) {
         return null;
+    }
+    if(same_gameobject(player, player1)) {
+        score2 = score2 + 1;
+    } else if( same_gameobject(player, player2)) {
+        score1 = score1 + 1;
     }
     gameStage = 1;
     playKOAnimatino();
