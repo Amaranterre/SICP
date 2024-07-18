@@ -304,7 +304,7 @@ function update_GameController(gameObject) {
     if( gameStage === 1 && !is_changing_map) {
         is_changing_map = true;
         
-        ChangeMap(FirstGameMap);
+        ChangeMap(SecondGameMap);
         // change_background(WhitePaperBackgroundImageURL, whitePaperPosition, whitePaperScale);
         
     
@@ -458,6 +458,92 @@ const FirstGameMap = [
     ['y', vector3(5*UnitCoodination, 4*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
     ['y', vector3(-UnitCoodination, 0, 0), vector3(UnitLength, 0.6, 0)],
     ['y', vector3(UnitCoodination, 0, 0), vector3(UnitLength, 0.6, 0)]
+];
+
+const SecondGameMap = [
+    ['x', vector3(0, -4.5*UnitCoodination, 0), vector3(12*UnitLength, 1, 0)],
+    ['x', vector3(0, 4.5*UnitCoodination, 0), vector3(12*UnitLength, 1, 0)],
+    ['y', vector3(-6*UnitCoodination, 0, 0), vector3(9*UnitLength, 1, 0)],
+    ['y', vector3(6*UnitCoodination, 0, 0), vector3(9*UnitLength, 1, 0)],
+    
+    ['x', vector3(-3*UnitCoodination, -3.5*UnitCoodination, 0), vector3(4*UnitLength, 0.6, 0)],
+    ['x', vector3(3*UnitCoodination, -3.5*UnitCoodination, 0), vector3(4*UnitLength, 0.6, 0)],
+    ['x', vector3(-3*UnitCoodination, 3.5*UnitCoodination, 0), vector3(4*UnitLength, 0.6, 0)],
+    ['x', vector3(3*UnitCoodination, 3.5*UnitCoodination, 0), vector3(4*UnitLength, 0.6, 0)],
+    ['x', vector3(-2.5*UnitCoodination, -2.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(2.5*UnitCoodination, -2.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(-2.5*UnitCoodination, 2.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(2.5*UnitCoodination, 2.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(-2*UnitCoodination, -1.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['x', vector3(2*UnitCoodination, -1.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['x', vector3(-2*UnitCoodination, 1.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['x', vector3(2*UnitCoodination, 1.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['x', vector3(0, -0.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['x', vector3(0,0.5*UnitCoodination,  0), vector3(2*UnitLength, 0.6, 0)],
+    
+    
+    ['y', vector3(-5*UnitCoodination, -2*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['y', vector3(-5*UnitCoodination, 2*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['y', vector3(5*UnitCoodination, -2*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['y', vector3(5*UnitCoodination, 2*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['y', vector3(-4*UnitCoodination, -1.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['y', vector3(-4*UnitCoodination, 1.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['y', vector3(4*UnitCoodination, -1.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['y', vector3(4*UnitCoodination, 1.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['y', vector3(-3*UnitCoodination, -UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(-3*UnitCoodination, UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(3*UnitCoodination, -UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(3*UnitCoodination, UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(-1*UnitCoodination, 0, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(1*UnitCoodination, 0, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(0, 4*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(0, -4*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(0, -2*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(0, 2*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)]
+
+
+    ];
+
+const ThirdGameMap =  [
+    ['x', vector3(0, -4.5*UnitCoodination, 0), vector3(12*UnitLength, 1, 0)],
+    ['x', vector3(0, 4.5*UnitCoodination, 0), vector3(12*UnitLength, 1, 0)],
+    ['y', vector3(-6*UnitCoodination, 0, 0), vector3(9*UnitLength, 1, 0)],
+    ['y', vector3(6*UnitCoodination, 0, 0), vector3(9*UnitLength, 1, 0)],
+    
+    ['x', vector3(-2.5*UnitCoodination, -3.5*UnitCoodination, 0), vector3(5*UnitLength, 0.6, 0)],
+    ['x', vector3(3.5*UnitCoodination, -3.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(-3.5*UnitCoodination, 3.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(2.5*UnitCoodination, 3.5*UnitCoodination, 0), vector3(5*UnitLength, 0.6, 0)],
+    ['x', vector3(-2.5*UnitCoodination, -2.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(2.5*UnitCoodination,-2.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(0, -0.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['x', vector3(0, 0.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['x', vector3(-2.5*UnitCoodination, 2.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(2.5*UnitCoodination, 2.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(2.5*UnitCoodination, -1.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(-2.5*UnitCoodination, 1.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(1.5*UnitCoodination, 1.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(-1.5*UnitCoodination, -1.5*UnitCoodination, 0), vector3(3*UnitLength, 0.6, 0)],
+    ['x', vector3(2.5*UnitCoodination, 0.5*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['x', vector3(2.5*UnitCoodination,-0.5*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['x', vector3(-2.5*UnitCoodination, 0.5*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['x', vector3(-2.5*UnitCoodination, -0.5*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    
+
+    ['y', vector3(-5*UnitCoodination,0.5*UnitCoodination, 0), vector3(6*UnitLength, 0.6, 0)],
+    ['y', vector3(5*UnitCoodination,-0.5*UnitCoodination, 0), vector3(6*UnitLength, 0.6, 0)],
+    ['y', vector3(-4*UnitCoodination,-0.5*UnitCoodination, 0), vector3(4*UnitLength, 0.6, 0)],
+    ['y', vector3(4*UnitCoodination,0.5*UnitCoodination, 0), vector3(4*UnitLength, 0.6, 0)],
+    ['y', vector3(-UnitCoodination,0*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(UnitCoodination,0*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(0*UnitCoodination,-2.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['y', vector3(0*UnitCoodination,2.5*UnitCoodination, 0), vector3(2*UnitLength, 0.6, 0)],
+    ['y', vector3(1*UnitCoodination,-3*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(-1*UnitCoodination,3*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(-2*UnitCoodination,0*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(-3*UnitCoodination,0*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(2*UnitCoodination,0*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)],
+    ['y', vector3(3*UnitCoodination,0*UnitCoodination, 0), vector3(UnitLength, 0.6, 0)]
 ];
 
 let curWallsData = [];
