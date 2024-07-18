@@ -258,8 +258,8 @@ const startGameMap = [
     ['y', vector3(1.9 * UnitCoodination, -3.25 * UnitCoodination, 0), vector3(1.5*UnitLength, 1, 0)]
 ];
 
-const initialPlayer1Position = vector3(-4, 4, playerLayer);
-const initialPlayer2Position = vector3(4, -4, playerLayer);
+const initialPlayer1Position = vector3(-2, 0, playerLayer);
+const initialPlayer2Position = vector3(2, 0, playerLayer);
 
 
 let PeaceMode = true;
@@ -624,7 +624,9 @@ function ChangeMap(walls) {
             
             destroy(mapChanger);
             if( ! is_start_game) {
-            destroy(startButton);
+                destroy(startButton);
+                player1Position = vector3(4, -4, playerLayer);
+                player2Position = vector3(-4 ,4, playerLayer);
             }
             
             debug_log("start to construct map");
@@ -638,8 +640,8 @@ function ChangeMap(walls) {
         gameStage = 0;
         is_changing_map = false;
         
-        set_position(player1, initialPlayer1Position);
-        set_position(player2, initialPlayer2Position);
+        set_position(player1, player1Position);
+        set_position(player2, player2Position);
         is_start_game = true;
         }
         
