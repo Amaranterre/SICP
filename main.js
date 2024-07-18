@@ -920,7 +920,7 @@ function getPlayerBulletCreator(time_gap) {
 const turret1 = instantiate_sprite(Player1TurretImageURL);
 const turret2 = instantiate_sprite(Player2TurretImageURL);
 
-const TurretLength = 0.34;
+const TurretLength = 0.4;
 const rotateSpeed = vector3(0, 0, 180); //180 degree per second
 const turretSize = vector3(0.8, 0.8, 0);
 
