@@ -178,6 +178,7 @@ function playKOAnimatino() {
 //<----------------------------------------------------
 // const related
 
+
 const x_boundary = 15;
 const y_boundary = 15;
 
@@ -245,9 +246,20 @@ function is_same_vector(vec1, vec2) {
 
 const UnitCoodination=1.02;
 const UnitLength=UnitCoodination/5.41;
+const startGameMap = [
+    ['x', vector3(0, -5*UnitCoodination, 0), vector3(22*UnitLength, 1, 0)],
+    ['x', vector3(0, 5*UnitCoodination, 0), vector3(22*UnitLength, 1, 0)],
+    ['y', vector3(-11*UnitCoodination, 0, 0), vector3(10*UnitLength, 1, 0)],
+    ['y', vector3(11*UnitCoodination, 0, 0), vector3(10*UnitLength, 1, 0)],
+    
+    ['x', vector3(0.4 * UnitCoodination, -1.5 * UnitCoodination, 0), vector3(5*UnitLength, 1, 0)],
+    ['x', vector3(-0.1 * UnitCoodination, -2.5 * UnitCoodination, 0), vector3(4*UnitLength, 1, 0)],
+    ['y', vector3(2.9 * UnitCoodination, -2.75 * UnitCoodination, 0), vector3(2.5*UnitLength, 1, 0)],
+    ['y', vector3(1.9 * UnitCoodination, -3.25 * UnitCoodination, 0), vector3(1.5*UnitLength, 1, 0)]
+];
 
-const initialPlayer1Position = vector3(-2, 0, playerLayer);
-const initialPlayer2Position = vector3(2, 0, playerLayer);
+const initialPlayer1Position = vector3(-4, 4, playerLayer);
+const initialPlayer2Position = vector3(4, -4, playerLayer);
 
 
 let PeaceMode = true;
@@ -289,7 +301,7 @@ function start_GameController(gameObject) {
 }
 
 let is_changing_map = false;
-
+let prev_walls = startGameMap;
 // let test_flag = false;
 function update_GameController(gameObject) {
     
@@ -304,11 +316,31 @@ function update_GameController(gameObject) {
     if( gameStage === 1 && !is_changing_map) {
         is_changing_map = true;
         
-        ChangeMap(SecondGameMap);
+        RandomChangeMap();
+        // ChangeMap(FirstGameMap);
+        // ChangeMap(SecondGameMap);
         // change_background(WhitePaperBackgroundImageURL, whitePaperPosition, whitePaperScale);
         
     
         RandomChangeBackground();
+    }
+}
+
+function RandomChangeMap() {
+    debug_log("randomly change map");
+    const cur = math_floor(math_random() * 3);
+    
+    if(cur === 0) {
+            ChangeMap(FirstGameMap);
+            prev_walls = FirstGameMap;
+
+    } else if( cur === 1) {
+            ChangeMap(SecondGameMap);
+            prev_walls = SecondGameMap;
+    
+    } else if( cur === 2) {
+            ChangeMap(ThirdGameMap);
+                prev_walls = ThirdGameMap;
     }
 }
 
@@ -352,7 +384,7 @@ const snowlandBackgroundPosition = vector3(0, 0, 100);
 const snowlandBackgroundScale = vector3(1.5, 1.3, 0);
 
 const startBackgroundPosition = vector3(-0.3, -1.4, 100);
-const startBackgroundScale = vector3(0.52, 0.4, 0);
+const startBackgroundScale = vector3(0.48, 0.4, 0);
 
 function change_background(new_url, position, scale) {
     destroy(background);
@@ -375,17 +407,7 @@ function change_background(new_url, position, scale) {
 //wallData: ['x' or 'y', position, scale]
 
 
-const startGameMap = [
-    ['x', vector3(0, -5*UnitCoodination, 0), vector3(22*UnitLength, 1, 0)],
-    ['x', vector3(0, 5*UnitCoodination, 0), vector3(22*UnitLength, 1, 0)],
-    ['y', vector3(-11*UnitCoodination, 0, 0), vector3(10*UnitLength, 1, 0)],
-    ['y', vector3(11*UnitCoodination, 0, 0), vector3(10*UnitLength, 1, 0)],
-    
-    ['x', vector3(0.4 * UnitCoodination, -1.5 * UnitCoodination, 0), vector3(5*UnitLength, 1, 0)],
-    ['x', vector3(-0.1 * UnitCoodination, -2.5 * UnitCoodination, 0), vector3(4*UnitLength, 1, 0)],
-    ['y', vector3(2.9 * UnitCoodination, -2.75 * UnitCoodination, 0), vector3(2.5*UnitLength, 1, 0)],
-    ['y', vector3(1.9 * UnitCoodination, -3.25 * UnitCoodination, 0), vector3(1.5*UnitLength, 1, 0)]
-];
+
 
 const FirstGameMap = [
     ['x', vector3(0, -4.5*UnitCoodination, 0), vector3(12*UnitLength, 1, 0)],
@@ -557,10 +579,10 @@ function ChangeMap(walls) {
     let timer = 0;
     const mapChanger = instantiate_empty();
     // const dataLen = array_length(walls);
-    const curDataLen = array_length(curWallsObject);
-    
+    const curDataLen = array_length(prev_walls);
     
     PeaceMode = true;
+    let flag = false;
         
         // player1LiveState = true;
         // player2LiveState = true;
@@ -578,12 +600,16 @@ function ChangeMap(walls) {
     set_update(mapChanger, gameObject => {
         debug_log(is_start_game);
         timer = timer + delta_time();
-        if(timer > 3) {
+        if(timer > 3 && !flag) {
+            flag = true;
             debug_log("change map update timed function");
             let tempObject = [];
             
          
-                for(let i = 0; i < curDataLen; i = i + 1) {
+            for(let i = 0; i < curDataLen; i = i + 1) {
+                if(is_null(curWallsObject[i]) ) {
+                    break;
+                }
                 tempObject[i] = curWallsObject[i];
                 remove_collider_components(curWallsObject[i]);
                 curWallsData[i] = null;
